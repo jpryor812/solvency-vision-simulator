@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React from 'react'; 
 import { Card, CardContent } from "@/components/ui/card";
 import { YearlyResults } from '@/lib/solvency-calculator';
 import { formatCurrency } from '@/lib/solvency-constants';
@@ -44,11 +43,11 @@ const SummaryCards: React.FC<SummaryCardsProps> = ({ yearlyData, depletionYear }
       <Card className="card-shadow">
         <CardContent className="p-4 text-center">
           <h3 className="text-lg font-medium mb-2">Depletion Year</h3>
-          <div className={`text-3xl font-bold ${depletionYear && depletionYear > 2033 ? 'text-solvency-surplus' : depletionYear ? 'text-solvency-deficit' : 'text-solvency-surplus'}`}>
-            {depletionYear ? depletionYear : 'After 2033'}
+          <div className={`text-3xl font-bold ${depletionYear ? (depletionYear > 2033 ? 'text-solvency-surplus' : 'text-solvency-deficit') : 'text-solvency-surplus'}`}>
+            {depletionYear ? depletionYear : 'Not Depleted'}
           </div>
           <div className="text-sm text-gray-500 mt-1">
-            {depletionYear && depletionYear <= 2033 
+            {depletionYear 
               ? `${depletionYear - 2024} years from now` 
               : 'Extended solvency'}
           </div>

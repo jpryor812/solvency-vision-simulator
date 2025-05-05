@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import ControlPanel from '@/components/simulator/ControlPanel';
 import SummaryCards from '@/components/simulator/SummaryCards';
@@ -99,7 +98,10 @@ const Index: React.FC = () => {
             </div>
 
             {/* Data Table */}
-            <DataTable data={simulationResults.yearlyData} />
+            <DataTable 
+              data={simulationResults.yearlyData} 
+              depletionYear={simulationResults.depletionYear} 
+            />
           </div>
         </div>
 

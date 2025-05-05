@@ -1,4 +1,3 @@
-
 import {
   baselineYears,
   baselineIncome,
@@ -52,17 +51,21 @@ export function runSimulation(inputs: SimulatorInputs): SimulationResults {
     const year = baselineYears[i];
     const payroll = payroll2024 * Math.pow(1 + Math.min(payrollGrowth, 0.06), year - 2024);
     
-    // Income adjustments
-    const incRateBump = (
-      inputs.combinedTaxStep * coeffCombinedRate + 
-      inputs.employerSurcharge * coeffSingleSideRate + 
-      inputs.empTaxOnlyStep * coeffSingleSideRate
-    ) * payroll / 0.001;
+// Income: tax‑rate adjustments
+const rateIncCombined = inputs.combinedTaxStep   / 0.1;   // how many 0.1‑ppt bumps
+const rateIncEmpOnly  = inputs.empTaxOnlyStep    / 0.1;
+const rateIncEmpSur   = inputs.employerSurcharge / 0.1;
+
+const incRateBump =
+  (rateIncCombined * coeffCombinedRate +
+   rateIncEmpOnly  * coeffSingleSideRate +
+   rateIncEmpSur   * coeffSingleSideRate) * payroll;
+
     
     const wageGainPct = getWageGainPct(inputs.empCapOption, inputs.customCapPct);
-    const incCapLift = (wageGainPct / 5) * coeffWageShareEmp * payroll / 0.001;
+    const incCapLift = (wageGainPct / 5) * coeffWageShareEmp * payroll;
     
-    const incImmigRamp = inputs.immigBoostM * coeffImmig1M * payroll / 0.001 * ramp(year);
+    const incImmigRamp = inputs.immigBoostM * coeffImmig1M * payroll * ramp(year);
     
     const incEquity = (inputs.equityShiftB / 100) * 0.9; // $0.9B per $100B
     
@@ -71,9 +74,9 @@ export function runSimulation(inputs: SimulatorInputs): SimulationResults {
     const newIncome = baselineIncome[i] + incRateBump + incCapLift + incImmigRamp + incEquity + incGenRev;
     
     // Cost adjustments
-    const costFRA = -inputs.fraYearsUp * coeffFRA_1yr * payroll / 0.001;
-    const costChCPI = -(inputs.chainedCPIflag ? 1 : 0) * coeffChainedCPI * payroll / 0.001;
-    const costPPI = -(inputs.ppiCoveragePct / 10) * coeffPPI_10ppt * payroll / 0.001;
+    const costFRA = -inputs.fraYearsUp * coeffFRA_1yr * payroll;
+    const costChCPI = -(inputs.chainedCPIflag ? 1 : 0) * coeffChainedCPI * payroll;
+    const costPPI = -(inputs.ppiCoveragePct / 10) * coeffPPI_10ppt * payroll;
     
     const newCost = baselineCost[i] + costFRA + costChCPI + costPPI;
     
@@ -113,6 +116,19 @@ export function runSimulation(inputs: SimulatorInputs): SimulationResults {
     const firstZeroAssetYear = yearlyData.find(data => data.assets === 0);
     if (firstZeroAssetYear) {
       depletionYear = firstZeroAssetYear.year;
+    }
+  }
+  
+  // Add extrapolation logic for depletion years beyond our simulation period
+  if (depletionYear === null && yearlyData.length > 0) {
+    const lastYearData = yearlyData[yearlyData.length - 1];
+    
+    // Only try to extrapolate if we have positive assets but negative surplus
+    // (meaning the fund is heading toward depletion)
+    if (lastYearData.assets > 0 && lastYearData.surplus < 0) {
+      // Estimate years until depletion using last year's assets and surplus
+      const yearsUntilDepletion = Math.ceil(lastYearData.assets / Math.abs(lastYearData.surplus));
+      depletionYear = lastYearData.year + yearsUntilDepletion;
     }
   }
   
