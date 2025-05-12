@@ -6,6 +6,7 @@ import TrustFundAssetsChart from '@/components/simulator/TrustFundAssetsChart';
 import MonthsReserveChart from '@/components/simulator/MonthsReserveChart';
 import DataTable from '@/components/simulator/DataTable';
 import Disclaimer from '@/components/simulator/Disclaimer';
+import PlanTabs from '@/components/simulator/PlanTabs';
 import { SimulatorInputs } from '@/lib/solvency-constants';
 import { runSimulation } from '@/lib/solvency-calculator';
 import { useToast } from '@/hooks/use-toast';
@@ -13,8 +14,8 @@ import { useToast } from '@/hooks/use-toast';
 const Index: React.FC = () => {
   const { toast } = useToast();
   
-  // Initial values for simulator inputs
-  const [inputs, setInputs] = useState<SimulatorInputs>({
+  // Get default plan values
+  const getDefaultPlan = (): SimulatorInputs => ({
     combinedTaxStep: 0,
     empTaxOnlyStep: 0,
     empCapOption: "status quo",
@@ -25,8 +26,22 @@ const Index: React.FC = () => {
     immigBoostM: 0,
     equityShiftB: 0,
     employerSurcharge: 0,
-    genRevTransferB: 0
+    employerTaxOnlyStep: 0,
+    genRevTransferB: 0,
+    combinedTaxImplementYear: 2040,
+    empTaxOnlyImplementYear: 2040,
+    employerTaxOnlyImplementYear: 2040,
+    empCapImplementYear: 2040,
+    fraImplementYear: 2040,
+    chainedCPIImplementYear: 2040,
+    ppiImplementYear: 2040,
+    employerSurchargeImplementYear: 2040,
+    middleIncludePct: 50,
+    upperIncludePct: 85
   });
+  
+  // Initial values for simulator inputs
+  const [inputs, setInputs] = useState<SimulatorInputs>(getDefaultPlan());
   
   // Run the simulation with current inputs
   const simulationResults = runSimulation(inputs);
@@ -54,18 +69,40 @@ const Index: React.FC = () => {
     }));
   };
 
+  // Handler for loading saved plan
+  const handleLoadPlan = (plan: SimulatorInputs) => {
+    setInputs(plan);
+  };
+
+  // Handler for saving current plan
+  const handleSavePlan = () => {
+    localStorage.setItem('justinsPlan', JSON.stringify(inputs));
+    toast({
+      title: "Success",
+      description: "Justin's Plan has been saved successfully!",
+      variant: "default",
+    });
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <header className="bg-primary text-primary-foreground py-6">
         <div className="container">
           <h1 className="text-2xl md:text-3xl font-bold">Social Security Solvency Simulator</h1>
           <p className="mt-2">
-            Experiment with reforms and see real-time impacts on Social Security solvency
+            Experiment with reforms and see real-time impacts on Social Security solvency (eventually lock in Justin's Plan tab and allow users to save their own tabs)
           </p>
         </div>
       </header>
 
       <main className="container py-8">
+        {/* Add the Plan Tabs component */}
+        <PlanTabs 
+          currentInputs={inputs}
+          onLoadPlan={handleLoadPlan}
+          onSavePlan={handleSavePlan}
+        />
+        
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Left column - Control panel */}
           <div className="w-full lg:w-1/3">

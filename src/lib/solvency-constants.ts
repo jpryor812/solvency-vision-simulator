@@ -1,4 +1,3 @@
-
 // Baseline data
 export const baselineYears = [2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033];
 export const baselineIncome = [1192.6, 1224.8, 1291.3, 1348.8, 1410.6, 1472.6, 1535.1, 1599.7, 1665.1, 1732.3]; // billions, includes interest
@@ -17,6 +16,13 @@ export const coeffPPI_10ppt = 0.0011; // – cost per 10 % of earners hit by pri
 export const coeffImmig1M = 0.0013; // + income per +1 M net workers/yr after 5 yr ramp
 export const coeffEquity100B = 0.00009; // + income (interest) per $100 B shifted to equities
 export const usdPer0_1pctPayroll = 11; // $ B in 2030 for each 0.1 % payroll
+
+export const sharePayrollMiddle = 0.11;   // wages whose benefits fall in middle band
+export const sharePayrollUpper  = 0.05;   // wages whose benefits fall in top band
+// 0.11 + 0.05 ≈ 0.16 ⇒ matches SSA’s 0.42 %‑of‑payroll benefit tax today
+
+export const includeMiddle0 = 0.50;       // 50 % inclusion now
+export const includeUpper0  = 0.85;       // 85 % inclusion now
 
 // Helper for immigration ramp
 export const ramp = (year: number): number => {
@@ -37,7 +43,26 @@ export const formatPercent = (value: number): string => {
   return `${(value * 100).toFixed(1)}%`;
 };
 
-export type CapOption = "status quo" | "+50 %" | "+100 %" | "No cap" | "Custom %";
+export const BENEFIT_TAX_MTR = 0.15;      // avg marginal tax retirees pay
+/* helper to turn an inclusion change into $‑billions */
+export const benefitTaxDelta = (
+  payroll: number,
+  incMid: number,
+  incTop: number
+): number => {
+  const Δmiddle = (incMid - includeMiddle0) * sharePayrollMiddle * payroll;
+  const Δupper  = (incTop - includeUpper0)  * sharePayrollUpper  * payroll;
+  return BENEFIT_TAX_MTR * (Δmiddle + Δupper);   // dollars
+};
+
+// Define the possible options for the employer wage base cap
+export type CapOption =
+  | "status quo"
+  | "+50 %"
+  | "+100 %"
+  | "+200 %"
+  | "No cap"
+  | "Custom %";
 
 export interface SimulatorInputs {
   combinedTaxStep: number;
@@ -45,10 +70,21 @@ export interface SimulatorInputs {
   empCapOption: CapOption;
   customCapPct: number;
   fraYearsUp: number;
+  employerTaxOnlyStep: number;
+  employerTaxOnlyImplementYear: number;
   chainedCPIflag: boolean;
   ppiCoveragePct: number;
   immigBoostM: number;
   equityShiftB: number;
   employerSurcharge: number;
   genRevTransferB: number;
+  combinedTaxImplementYear: number;
+  empTaxOnlyImplementYear: number;
+  empCapImplementYear: number;
+  employerSurchargeImplementYear: number;
+  fraImplementYear: number;
+  chainedCPIImplementYear: number;
+  ppiImplementYear: number;
+  middleIncludePct: number; 
+upperIncludePct:  number;  
 }

@@ -18,12 +18,12 @@ const SummaryCards: React.FC<SummaryCardsProps> = ({ yearlyData, depletionYear }
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       <Card className="card-shadow">
         <CardContent className="p-4 text-center">
-          <h3 className="text-lg font-medium mb-2">Surplus/Deficit 2030</h3>
-          <div className={`text-3xl font-bold ${data2030.surplus >= 0 ? 'text-solvency-surplus' : 'text-solvency-deficit'}`}>
-            {formatCurrency(data2030.surplus)}
+          <h3 className="text-lg font-medium mb-2">Surplus/Deficit 2033</h3>
+          <div className={`text-3xl font-bold ${data2033.surplus >= 0 ? 'text-solvency-surplus' : 'text-solvency-deficit'}`}>
+            {formatCurrency(data2033.surplus)}
           </div>
           <div className="text-sm text-gray-500 mt-1">
-            {data2030.surplus >= 0 ? 'Surplus' : 'Deficit'}
+            {data2033.surplus >= 0 ? 'Surplus' : 'Deficit'}
           </div>
         </CardContent>
       </Card>
