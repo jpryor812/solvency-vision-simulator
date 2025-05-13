@@ -29,7 +29,7 @@ export const ramp = (year: number): number => {
   const yearIndex = baselineYears.indexOf(year);
   if (yearIndex === -1) return 0;
   
-  const rampFactors = [0.4, 0.6, 0.75, 0.9, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0];
+  const rampFactors = [0.5, 0.6, 0.75, 0.9, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0];
   return rampFactors[yearIndex] || 1.0;
 };
 
@@ -59,6 +59,7 @@ export const benefitTaxDelta = (
 export type CapOption =
   | "status quo"
   | "+50 %"
+  | "+75 %"
   | "+100 %"
   | "+200 %"
   | "No cap"

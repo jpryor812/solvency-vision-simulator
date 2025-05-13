@@ -90,7 +90,7 @@ const Index: React.FC = () => {
         <div className="container">
           <h1 className="text-2xl md:text-3xl font-bold">Social Security Solvency Simulator</h1>
           <p className="mt-2">
-            Experiment with reforms and see real-time impacts on Social Security solvency (eventually lock in Justin's Plan tab and allow users to save their own tabs)
+            Experiment with reforms and see real-time impacts on Social Security solvency
           </p>
         </div>
       </header>

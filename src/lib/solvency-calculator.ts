@@ -57,6 +57,7 @@ function getWageGainPct(opt: CapOption, custom: number): number {
   switch (opt) {
     case 'status quo': return 0;
     case '+50 %':      return 7;
+    case '+75 %':      return 9;
     case '+100 %':     return 11;
     case '+200 %':     return 14;
     case 'No cap':     return 17;
@@ -97,7 +98,7 @@ export function runSimulation(inputs: SimulatorInputs): SimulationResults {
   let year = 2024;
   let idx  = 0;  // index into SSA rows through 2033
 
-  while (year <= 2100 && (equityPrincipalPrev + treasuryAssetsPrev) > 0) {
+  while (year <= 2075 && (equityPrincipalPrev + treasuryAssetsPrev) > 0) {
 
     /* ----- payroll base this year ----- */
     const payroll = payroll2024 * Math.pow(1 + payrollGrowth, year - 2024);

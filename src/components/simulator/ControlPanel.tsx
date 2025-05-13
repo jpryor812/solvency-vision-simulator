@@ -138,6 +138,10 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ inputs, onChange }) => {
                   <Label htmlFor="plus-50">+50% ($264,150)</Label>
                 </div>
                 <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="+75 %" id="plus-75" />
+                  <Label htmlFor="plus-75">+75% ($303,187)</Label>
+                </div>
+                <div className="flex items-center space-x-2">
                   <RadioGroupItem value="+100 %" id="plus-100" />
                   <Label htmlFor="plus-100">+100% ($352,200)</Label>
                 </div>
@@ -317,13 +321,13 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ inputs, onChange }) => {
           <div className="space-y-6">
             <div className="space-y-2">
               <div className="flex justify-between">
-                <Label>Extra Net Immigrants per Year (M)</Label>
+                <Label>Extra Net Immigrants per Year (2.8M baseline)</Label>
                 <span className="font-mono">{inputs.immigBoostM.toFixed(2)}M</span>
               </div>
               <Slider 
                 value={[inputs.immigBoostM]} 
                 min={0} 
-                max={5} 
+                max={3} 
                 step={0.25} 
                 onValueChange={(value) => onChange({ immigBoostM: value[0] })} 
               />
