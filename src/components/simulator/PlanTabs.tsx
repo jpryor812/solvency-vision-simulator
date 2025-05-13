@@ -17,16 +17,14 @@ const PlanTabs: React.FC<PlanTabsProps> = ({
 }) => {
   // Load default and saved plan
   const defaultPlan = getDefaultPlan();
-  const savedPlan = getSavedPlan();
+  const justinsPlan = getJustinsPlan();
   
   // Handle tab change
   const handleTabChange = (value: string) => {
     if (value === "default") {
-      onLoadPlan(defaultPlan);
+      onLoadPlan(getDefaultPlan());
     } else if (value === "justins-plan") {
-      if (savedPlan) {
-        onLoadPlan(savedPlan);
-      }
+      onLoadPlan(getJustinsPlan());
     }
   };
 
@@ -82,18 +80,33 @@ function getDefaultPlan(): SimulatorInputs {
   };
 }
 
-// Helper function to get saved plan
-function getSavedPlan(): SimulatorInputs | null {
-  const savedPlanJson = localStorage.getItem('justinsPlan');
-  if (savedPlanJson) {
-    try {
-      return JSON.parse(savedPlanJson);
-    } catch (e) {
-      console.error('Error parsing saved plan', e);
-      return null;
-    }
-  }
-  return null;
+// Replace getSavedPlan with a hardcoded version of Justin's Plan
+function getJustinsPlan(): SimulatorInputs {
+  return {
+    combinedTaxStep: 0.4, // Example values
+    empTaxOnlyStep: 0.0,
+    employerTaxOnlyStep: 0.0,
+    empCapOption: "+75 %",
+    customCapPct: 20,
+    fraYearsUp: 5,
+    chainedCPIflag: false,
+    ppiCoveragePct: 0,
+    immigBoostM: 2.5,
+    equityShiftB: 175,
+    employerSurcharge: 0.0,
+    genRevTransferB: 0,
+    // Implementation years
+    combinedTaxImplementYear: 2034,
+    empTaxOnlyImplementYear: 2040,
+    employerTaxOnlyImplementYear: 2040,
+    empCapImplementYear: 2028,
+    fraImplementYear: 2050,
+    chainedCPIImplementYear: 2030,
+    ppiImplementYear: 2035,
+    employerSurchargeImplementYear: 2040,
+    middleIncludePct: 60,
+    upperIncludePct: 100
+  };
 }
 
 export default PlanTabs; 

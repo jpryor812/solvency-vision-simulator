@@ -321,7 +321,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ inputs, onChange }) => {
           <div className="space-y-6">
             <div className="space-y-2">
               <div className="flex justify-between">
-                <Label>Extra Net Immigrants per Year (2.8M baseline)</Label>
+                <Label>Extra Net Immigrants per Year (on top of 2.8M/yr baseline)</Label>
                 <span className="font-mono">{inputs.immigBoostM.toFixed(2)}M</span>
               </div>
               <Slider 
