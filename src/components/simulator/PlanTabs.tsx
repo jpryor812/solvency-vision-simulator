@@ -37,6 +37,7 @@ const PlanTabs: React.FC<PlanTabsProps> = ({
             <TabsTrigger value="justins-plan">Justin's Plan</TabsTrigger>
           </TabsList>
           
+          {/*
           <Button 
             variant="outline" 
             size="sm"
@@ -46,6 +47,7 @@ const PlanTabs: React.FC<PlanTabsProps> = ({
             <Save size={16} />
             Save Current Plan
           </Button>
+          */}
         </div>
       </Tabs>
     </div>
